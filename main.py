@@ -63,7 +63,7 @@ def create_and_train_model(data, years=3):
     model.compile(optimizer='adam', loss='mean_squared_error')
 
     # Train the model using the past 60 days of data
-    model.fit(x_train, y_train, batch_size=1, epochs=1)
+    model.fit(x_train, y_train, batch_size=1, epochs=10)
 
     return model, scaler, scaled_data  # Remove training_data_len
 
@@ -101,10 +101,10 @@ def create_and_plot_forecast(model, scaler, scaled_data, data):
     next_day_df = pd.DataFrame(index=[next_day_date])
 
     # Add the predicted values to the DataFrame
-    next_day_df['Predicted Close'] = predicted_values.flatten()
     next_day_df['Predicted Open'] = predicted_open
     next_day_df['Predicted High'] = predicted_high
     next_day_df['Predicted Low'] = predicted_low
+    next_day_df['Predicted Close'] = predicted_values.flatten()
     next_day_df['Predicted Volume'] = data['Volume'].iloc[-1] * daily_change
 
     # Calculate Mean Absolute Percentage Error (MAPE)
@@ -150,7 +150,7 @@ data = load_data(selected_stock)
 data_load_state.text('Loading data... done!')
 
 st.subheader('Raw data')
-st.write(data.tail())
+st.write(data[::-1])
 
 # Plot raw data
 plot_raw_data(data)
